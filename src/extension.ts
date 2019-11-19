@@ -42,8 +42,6 @@ function checkString(strs:string[], regexPattern:RegExp) {
 			.then(selection => {
 				openBrowser(errorUrl);
 			});
-			// someFunc.bind(null, found));
-			// openBrowser(found?.join(' '));
 			return;
 		}
 	});
