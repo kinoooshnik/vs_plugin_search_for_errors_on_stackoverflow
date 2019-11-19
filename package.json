@@ -3,6 +3,7 @@
 	"displayName": "Search for errors on stackoverflow",
 	"description": "",
 	"version": "0.0.1",
+	"enableProposedApi": true,
 	"engines": {
 		"vscode": "^1.40.0"
 	},
@@ -10,14 +11,75 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
-			"command": "extension.helloWorld",
-			"title": "Hello World"
-		}]
+		"commands": [
+			{
+				"command": "extension.helloWorld",
+				"title": "Hello World"
+			},
+			{
+				"command": "terminalTest.createAndSend",
+				"title": "Terminal API: Create Terminal and Immediately Send"
+			},
+			{
+				"command": "terminalTest.createTerminal",
+				"title": "Terminal API: Create Terminal"
+			},
+			{
+				"command": "terminalTest.createTerminalHideFromUser",
+				"title": "Terminal API: Create Terminal (hideFromUser)"
+			},
+			{
+				"command": "terminalTest.createZshLoginShell",
+				"title": "Terminal API: Create Terminal (zsh login shell)"
+			},
+			{
+				"command": "terminalTest.dimensions",
+				"title": "Terminal API: Set dimensions"
+			},
+			{
+				"command": "terminalTest.dispose",
+				"title": "Terminal API: Dispose"
+			},
+			{
+				"command": "terminalTest.hide",
+				"title": "Terminal API: Hide"
+			},
+			{
+				"command": "terminalTest.onDidWriteTerminalData",
+				"title": "Terminal API: Attach data listener"
+			},
+			{
+				"command": "terminalTest.onDidChangeTerminalDimensions",
+				"title": "Terminal API: Attach dimensions listener"
+			},
+			{
+				"command": "terminalTest.processId",
+				"title": "Terminal API: Get process ID"
+			},
+			{
+				"command": "terminalTest.sendText",
+				"title": "Terminal API: Send Text"
+			},
+			{
+				"command": "terminalTest.sendTextNoNewLine",
+				"title": "Terminal API: Send Text (no implied \\n)"
+			},
+			{
+				"command": "terminalTest.show",
+				"title": "Terminal API: Show"
+			},
+			{
+				"command": "terminalTest.showPreserveFocus",
+				"title": "Terminal API: Show (preserving focus)"
+			},
+			{
+				"command": "terminalTest.terminals",
+				"title": "Terminal API: View terminals"
+			}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

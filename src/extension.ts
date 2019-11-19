@@ -1,30 +1,58 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+var errorUrl:string;
+
 export function activate(context: vscode.ExtensionContext) {
+	context.subscriptions.push(
+		(<any>vscode.window).onDidWriteTerminalData((e: any) => {
+			if (!e.data.includes("\n")) {
+				return;
+			}
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "search-for-errors-on-stackoverflow" is now active!');
+			let languages = new Set();
+			vscode.workspace.textDocuments.forEach(function (doc) {
+				languages.add(doc.languageId);
+			});
+			languages.delete("plaintext");
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+			let stringArray = e.data.split('\n');
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
-
-	context.subscriptions.push(disposable);
+			languages.forEach(function (lang) {
+				switch(lang) {
+					case 'python':
+						checkString(stringArray, /(^.*(Error:|Exception:).+$)/gm);
+					  	break;
+					case 'javascript':
+						checkString(stringArray, /(Uncaught? ?Error:.+)/gm);
+						break;
+					case 'php':
+						checkString(stringArray, /((Caught.+Exception|Uncaught.+with message:).+)/gm);
+						break;
+				  }
+			});
+		}));
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+function checkString(strs:string[], regexPattern:RegExp) {
+	strs.forEach(function (str) {
+		var found = str.match(regexPattern);
+		if (found != null) {
+			errorUrl = found?.join(' ');
+			vscode.window.showInformationMessage('Ooops! \'' + found?.join(' ') + '\' seems like a mistake. Do you want to find her on stackoverflow?', 'To find!')
+			.then(selection => {
+				openBrowser(errorUrl);
+			});
+			// someFunc.bind(null, found));
+			// openBrowser(found?.join(' '));
+			return;
+		}
+	});
+}
+
+function someFunc(selection:any, found:any){
+	console.log(selection);
+	openBrowser(found?.join(' '));
+}
 
 function openBrowser(str:string) {
 	let searchQuery = "https://www.google.com/search?q=" + str.replace(' ', '+') + '+site:stackoverflow.com';
