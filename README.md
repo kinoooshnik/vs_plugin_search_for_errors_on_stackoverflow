@@ -7,3 +7,5 @@ When you have an error inside problems tab:
 3. Choose the error you want to find
 
 After that, opens a browser with search results.
+## Gif
+![](https://github.com/kinoooshnik/vs_plugin_search_for_errors_on_stackoverflow/blob/develop/Demo.gif)
