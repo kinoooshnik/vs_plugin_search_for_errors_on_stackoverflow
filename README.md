@@ -1,8 +1,9 @@
 # Search for errors on stackoverflow 
-The Search for errors on stackoverflow extension lets you search your error in a few taps.
+This extension allows you to quickly find your error on stackoverflow.
 ## Usage
-When you have error in problems tab:
+When you have an error inside problems tab:
 1. Open Command Palette `Ctrl+Shift+P`
-2. Start enter *searchForErrorOnStackoverflow* сhoose our extension's command
-3. Choose exception you want to find on stackoverflow
-After this steps must be opened the browser with your exception request.
+2. Search for command `Search for error on stackoverflow`
+3. Choose the error you want to find
+
+After that, opens a browser with search results.
