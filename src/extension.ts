@@ -13,20 +13,34 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+	let disposable = vscode.commands.registerCommand('extension.searchForErrorOnStackoverflow', () => {
+		let diagnostics: [vscode.Uri, vscode.Diagnostic[]][] = vscode.languages.getDiagnostics();
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
+		let errorMessages: string[] = [];
+		diagnostics.forEach((value) => {
+			value[1].forEach((value) => {
+				let error: string = value.message;
+				if (value.source !== undefined) {
+					error += ' ' + value.source;
+				}
+				errorMessages.push(error);
+			})
+		});
+
+		vscode.window.showQuickPick(errorMessages)
+			.then((value) => {
+				if (value !== undefined)
+					openBrowser(value);
+			});
 	});
 
 	context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
 
-function openBrowser(str:string) {
-	let searchQuery = "https://www.google.com/search?q=" + str.replace(' ', '+') + '+site:stackoverflow.com';
+function openBrowser(str: string) {
+	let searchQuery = "https://www.google.com/search?q=" + str.replace(/[^\w ]/gm, '').replace(' ', '+') + '+site:stackoverflow.com';
 	vscode.env.openExternal(vscode.Uri.parse(searchQuery));
 }
