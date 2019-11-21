@@ -22,4 +22,4 @@ jobs:
         npm install
         vsce package
         echo ">>> Publish"
-        vsce publish -p ${MARKET_PLACE_TOKEN}
+        npx vsce publish -p ${MARKET_PLACE_TOKEN}
