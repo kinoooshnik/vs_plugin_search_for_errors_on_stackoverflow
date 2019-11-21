@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Publish
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - env:
+    - name: Publish
+      env:
         MARKET_PLACE_TOKEN: ${{ secrets.MARKET_PLACE_TOKEN }}
-    - run: |
+      run: |
         npm install
         vsce package
         echo ">>> Publish"
