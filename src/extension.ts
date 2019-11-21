@@ -31,6 +31,6 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() { }
 
 function openBrowser(str: string) {
-	let searchQuery = "https://www.google.com/search?q=" + encodeURI(str.replace(/["'-\\\/\.\,\|]/gm, '') + ' site:stackoverflow.com');
+	let searchQuery = "https://www.google.com/search?q=" + encodeURI(str.replace(/["'\-\\\/\.\,\|\(\)\[\]\~\`\^\:\#\;\%]/gm, '') + ' site:stackoverflow.com');
 	vscode.env.openExternal(vscode.Uri.parse(searchQuery));
 }
