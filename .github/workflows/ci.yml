@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - env:
+        MARKET_PLACE_TOKEN: ${{ secrets.MARKET_PLACE_TOKEN }}
+    - run: |
+        npm install
+        vsce package
+        echo ">>> Publish"
+        vsce publish -p ${MARKET_PLACE_TOKEN}
