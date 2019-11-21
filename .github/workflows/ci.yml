@@ -20,6 +20,6 @@ jobs:
         MARKET_PLACE_TOKEN: ${{ secrets.MARKET_PLACE_TOKEN }}
       run: |
         npm install
-        vsce package
+        npx vsce package
         echo ">>> Publish"
         npx vsce publish -p ${MARKET_PLACE_TOKEN}
