@@ -8,4 +8,4 @@ When you have an error inside problems tab:
 
 After that, opens a browser with search results.
 ## Gif
-![](https://github.com/kinoooshnik/vs_plugin_search_for_errors_on_stackoverflow/blob/develop/img/demo.gif)
+![](https://raw.githubusercontent.com/kinoooshnik/vs_plugin_search_for_errors_on_stackoverflow/master/img/demo.gif)
