@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 				if (value !== undefined)
 					openBrowser(value);
 			});
-		})
+	})
 	);
 }
 
