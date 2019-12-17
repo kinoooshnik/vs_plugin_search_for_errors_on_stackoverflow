@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as models from './models';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
@@ -23,11 +24,18 @@ export function activate(context: vscode.ExtensionContext) {
 				// process the response
 				.then((value) => {
 					if (value !== undefined)
-						openBrowser(value);
+						// как использовать
+						// функция асинхронная, поэтому обрабатывать ее ответ надо через callback (.then(функция, в которую передается результат))
+						// возвращает объект SearchPage
+						// в будущем немного порежу данные, которые есть изначально, потому что запрос на все данные выполняется долго
+						// для получения более полных данных нужно будет вызвать соответствующий метод класса вопроса
+						models.SearchPage.search('typescript').then(console.log);
+						openBrowser(value!);
 				});
 		})
 	);
 }
+
 
 export function deactivate() { }
 
