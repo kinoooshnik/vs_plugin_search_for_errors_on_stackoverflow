@@ -37,6 +37,7 @@
 		"tslint": "^5.20.0",
 		"vsce": "^1.69.0",
 		"request": "^2.88.0",
+		"request-promise-native": "^1.0.8",
 		"@types/request-promise-native": "^1.0.8"
 	}
 }
