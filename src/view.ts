@@ -20,6 +20,7 @@ function constructWebView(page: SearchPage): string {
         body = `<h1>Questions for query '${page.query}':</h1>`;
         page.results.forEach(element => {
             body += `<h1>${element.title}</h1>`;
+            body += `<p><em>Link: <a href="${element.link}">${element.link}</a></em></p>`
             body += element.body;
             body += `<h1>Answer:</h1>`
             body += element.answers[0].body;
