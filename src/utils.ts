@@ -1,7 +1,7 @@
 import * as request from "request-promise-native";
 
-export async function getJsonObject(params: { [key: string]: string; }) {
-    const baseUrl = 'https://api.stackexchange.com/2.2/search';
+export async function getJsonObject(method: string, params: { [key: string]: string; }) {
+    let baseUrl = 'https://api.stackexchange.com/2.2/' + method;
     let queryStrings: string[] = [];
     for (let i in params) {
         queryStrings.push(encodeURI(i + '=' + params[i]))
@@ -10,6 +10,7 @@ export async function getJsonObject(params: { [key: string]: string; }) {
         uri: baseUrl + '?' + queryStrings.join('&'),
         gzip: true
     };
+    console.log(baseUrl + '?' + queryStrings.join('&'))
     let response = await request.get(options);
     return JSON.parse(response);
 }

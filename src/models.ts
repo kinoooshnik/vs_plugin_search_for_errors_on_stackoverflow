@@ -7,6 +7,13 @@ interface SearchPageJson {
     total: number;
 }
 
+interface AnswersJson {
+    items: AnswerJson[];
+    has_more: boolean;
+    page: number;
+    total: number;
+}
+
 interface QuestionJson {
     question_id: number;
     score: number;
@@ -51,6 +58,8 @@ class SearchResult {
     title!: string;
     link!: string;
     isAnswered!: boolean;
+    answerCount!: number;
+    acceptedAnswerid?: number;
     askedDate!: Date;
     activeDate!: Date;
     viewedTimes!: number;
@@ -65,6 +74,8 @@ class SearchResult {
         this.title = jsonObject.title;
         this.link = jsonObject.link;
         this.isAnswered = jsonObject.is_answered;
+        this.answerCount = jsonObject.answer_count;
+        this.acceptedAnswerid = jsonObject.accepted_answer_id;
         this.askedDate = new Date(jsonObject.creation_date * 1000);
         this.activeDate = new Date(jsonObject.last_activity_date * 1000);
         this.viewedTimes = jsonObject.view_count;
@@ -73,8 +84,12 @@ class SearchResult {
         this.owner = new Owner(jsonObject.owner);
         this.answers = []
         for (let i in jsonObject.answers) {
-            this.answers.push(new Answer(jsonObject.answers[i]))
+            this.answers.push(new Answer(jsonObject.answers[i]));
         }
+    }
+
+    addAnswer(answer: Answer) {
+        this.answers.push(answer)
     }
 }
 
@@ -140,10 +155,32 @@ export class SearchPage {
         params['sort'] = 'votes';
         params['intitle'] = query;
         params['site'] = 'stackoverflow';
-        params['filter'] = '!b1MMEUbjRn2Lr5';
-        let response = await utils.getJsonObject(params)
+        params['filter'] = '!b1MMEUbuR7EV6a';
+        let response = await utils.getJsonObject('search', params)
 
         let searchPage = new SearchPage(query, response);
+
+        // чтобы уменьшить количество запросов, все ответы загружаются за раз 
+        let answerIds: number[] = [];
+        for (let i in searchPage.results) {
+            if (searchPage.results[i].acceptedAnswerid == undefined) {
+                continue;
+            }
+            answerIds.push(searchPage.results[i].acceptedAnswerid!);
+        }
+        params = {};
+        params['order'] = 'desc';
+        params['sort'] = 'activity';
+        params['site'] = 'stackoverflow';
+        let answersResponse: AnswersJson = await utils.getJsonObject('answers/' + answerIds.join(';'), params);
+        for (let i in answersResponse.items) {
+            for (let j in searchPage.results) {
+                if (searchPage.results[j].id == answersResponse.items[i].question_id) {
+                    searchPage.results[j].addAnswer(new Answer(answersResponse.items[i]));
+                }
+            }
+        }
+
         return searchPage;
     }
 }
