@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 					// в будущем немного порежу данные, которые есть изначально, потому что запрос на все данные выполняется долго
 					// для получения более полных данных нужно будет вызвать соответствующий метод класса вопроса
 					{
-						errorMessage = errorMessage.replace(/["'\-\\\/\.\,\|\(\)\[\]\~\`\^\:\#\;\%]/gm, '');
+						errorMessage = errorMessage.replace(/[^\w ]/gm, '');
 						console.log(errorMessage);
 						models.SearchPage.search(errorMessage).then(view.display);
 					}
