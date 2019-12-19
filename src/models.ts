@@ -52,7 +52,7 @@ interface AnswerJson {
     body: string;
 }
 
-class SearchResult {
+export class SearchResult {
     id!: number;
     score!: number;
     title!: string;
@@ -91,9 +91,24 @@ class SearchResult {
     addAnswer(answer: Answer) {
         this.answers.push(answer)
     }
+
+    async loadAllAnswers() {
+        let params: { [key: string]: string; } = {};
+        params['order'] = 'desc';
+        params['sort'] = 'activity';
+        params['site'] = 'stackoverflow';
+        params['filter'] = '!9Z(-wzu0T';
+        let response: AnswersJson = await utils.getJsonObject('questions/' + this.id + '/answers', params);
+
+        this.answers = [];
+        for (let i in response.items) {
+            this.answers.push(new Answer(response.items[i]));
+        }
+        return true;
+    }
 }
 
-class Owner {
+export class Owner {
     id!: number;
     displayName!: string;
     profileImage!: string;
@@ -109,7 +124,7 @@ class Owner {
     }
 }
 
-class Answer {
+export class Answer {
     answerId!: number;
     body!: string;
     isAccepted!: boolean;
@@ -172,6 +187,7 @@ export class SearchPage {
         params['order'] = 'desc';
         params['sort'] = 'activity';
         params['site'] = 'stackoverflow';
+        params['filter'] = '!9Z(-wzu0T';
         let answersResponse: AnswersJson = await utils.getJsonObject('answers/' + answerIds.join(';'), params);
         for (let i in answersResponse.items) {
             for (let j in searchPage.results) {
