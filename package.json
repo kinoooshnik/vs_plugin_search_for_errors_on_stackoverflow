@@ -13,16 +13,42 @@
 	],
 	"icon": "img/logo.png",
 	"activationEvents": [
-		"onCommand:extension.searchForErrorOnStackoverflow"
+		"onCommand:extension.searchProblemOnStackoverflow",
+		"onCommand:extension.searchTextOnStackoverflow"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.searchForErrorOnStackoverflow",
-				"title": "Search for error on stackoverflow"
+				"command": "extension.searchProblemOnStackoverflow",
+				"title": "Search problem on stackoverflow"
+			},
+			{
+				"command": "extension.searchTextOnStackoverflow",
+				"title": "Search on stackoverflow"
 			}
-		]
+		],
+		"keybindings": [
+			{
+				"command": "extension.searchProblemOnStackoverflow",
+				"key": "ctrl+k",
+				"mac": "cmd+k"
+			},
+			{
+				"command": "extension.searchTextOnStackoverflow",
+				"key": "ctrl+alt+k",
+				"mac": "cmd+alt+k"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "extension.searchTextOnStackoverflow",
+					"group": "z_commands",
+					"when": "editorHasSelection"
+				}
+			]
+		}
 	},
 	"license": "SEE LICENSE IN LICENSE",
 	"scripts": {

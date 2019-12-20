@@ -10,7 +10,6 @@ export async function getJsonObject(method: string, params: { [key: string]: str
         uri: baseUrl + '?' + queryStrings.join('&'),
         gzip: true
     };
-    console.log(baseUrl + '?' + queryStrings.join('&'))
     let response = await request.get(options);
     return JSON.parse(response);
 }

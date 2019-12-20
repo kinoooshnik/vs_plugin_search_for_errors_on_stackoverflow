@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import * as models from './models';
-import * as view from './view';
+import * as view from './views';
 
+let res: models.SearchPage;
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('extension.searchForErrorOnStackoverflow', () => {
+		vscode.commands.registerCommand('extension.searchProblemOnStackoverflow', () => {
 			// getting a list of problems
 			let diagnostics: [vscode.Uri, vscode.Diagnostic[]][] = vscode.languages.getDiagnostics();
 
@@ -25,25 +26,60 @@ export function activate(context: vscode.ExtensionContext) {
 				// process the response
 				.then((errorMessage) => {
 					if (errorMessage)
-					// как использовать
-					// функция асинхронная, поэтому обрабатывать ее ответ надо через callback (.then(функция, в которую передается результат))
-					// возвращает объект SearchPage
-					// в будущем немного порежу данные, которые есть изначально, потому что запрос на все данные выполняется долго
-					// для получения более полных данных нужно будет вызвать соответствующий метод класса вопроса
 					{
-						errorMessage = errorMessage.replace(/[^\w ]/gm, '');
-						console.log(errorMessage);
+						errorMessage = errorMessage.replace(/["'\-\\\/\.\,\|\(\)\[\]\~\`\^\:\#\;\%]/gm, '');
 						models.SearchPage.search(errorMessage).then(view.display);
 					}
 				});
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('extension.searchTextOnStackoverflow', async () => {
+			const selectedText = getSelectedText();
+			let searchTerm = await vscode.window.showInputBox({
+				ignoreFocusOut: selectedText === '',
+				placeHolder: 'Enter your Stackoverflow search query',
+				value: selectedText,
+				valueSelection: [0, selectedText.length + 1],
+			});
+
+			searchTerm = searchTerm!.replace(/["'\-\\\/\.\,\|\(\)\[\]\~\`\^\:\#\;\%]/gm, '');
+			models.SearchPage.search(searchTerm).then(view.display);
+		})
+	)
 }
 
 export function deactivate() { }
 
 function openBrowser(str: string) {
-	//                                                                                     что это за дикая регулярка?
 	let searchQuery = "https://www.google.com/search?q=" + encodeURI(str.replace(/["'\-\\\/\.\,\|\(\)\[\]\~\`\^\:\#\;\%]/gm, '') + ' site:stackoverflow.com');
 	vscode.env.openExternal(vscode.Uri.parse(searchQuery));
+}
+
+function getSelectedText(): string {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        return '';
+    }
+
+    const document = editor.document;
+    const eol = document.eol === 1 ? '\n' : '\r\n';
+    let result: string = '';
+    const selectedTextLines = editor.selections.map((selection) => {
+        if (selection.start.line === selection.end.line && selection.start.character === selection.end.character) {
+            const range = document.lineAt(selection.start).range;
+            const text = editor.document.getText(range);
+            return `${text}${eol}`;
+        }
+
+        return editor.document.getText(selection);
+    });
+
+    if (selectedTextLines.length > 0) {
+        result = selectedTextLines[0];
+    }
+
+    result = result.trim();
+    return result;
 }
