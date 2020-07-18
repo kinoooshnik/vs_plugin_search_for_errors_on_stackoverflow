@@ -2,7 +2,7 @@
 	"name": "search-for-errors-on-stackoverflow",
 	"displayName": "Search for errors on stackoverflow",
 	"description": "The VS code extension allows you to quickly find your error on stackoverflow.",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "kinoooshnik",
 	"repository": "https://github.com/kinoooshnik/vs_plugin_search_for_errors_on_stackoverflow",
 	"engines": {
